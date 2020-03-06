@@ -27,6 +27,7 @@ export const EstimatePage = () => {
 
   return (
     <div>
+      <h1>Estimate your trip</h1>
       <form onSubmit={onSubmit}>
         <DestinationInput
           name="from"
@@ -40,8 +41,11 @@ export const EstimatePage = () => {
           onEdit={onChangeTo}
           onSelect={onSelectTo}
         />
-        <button type="submit">submit</button>
+        <button type="submit" disabled={state.pending}>
+          submit
+        </button>
       </form>
+      {state.error && <p>{state.error}</p>}
       <Estimates distance={state.distance} />
     </div>
   )

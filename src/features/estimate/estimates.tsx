@@ -1,14 +1,17 @@
 import React, {useMemo} from 'react'
 
-import * as stubs from '../../stub'
 import {getEstimateOptions} from './core'
+import {useStoreSelector} from '../../store'
 
 type Props = Readonly<{
   distance: null | number
 }>
 
 export const Estimates = ({distance}: Props) => {
-  const {drivers, buses} = stubs
+  const {drivers, buses} = useStoreSelector(state => ({
+    drivers: state.drivers.entities,
+    buses: state.buses.entities,
+  }))
 
   const estimate = useMemo(() => getEstimateOptions(drivers, buses), [
     drivers,
@@ -24,9 +27,8 @@ export const Estimates = ({distance}: Props) => {
       {estimations.map(([driver, bus, value]) => (
         <li key={`${driver.id}:${bus.id}:${value}`}>
           <p>
-            {driver.firstName} {driver.lastName}
+            {driver.firstName} {driver.lastName} | {bus.make}
           </p>
-          <p>{bus.make}</p>
           <strong>~{(value / 8).toFixed(1)} day(s)</strong>
         </li>
       ))}

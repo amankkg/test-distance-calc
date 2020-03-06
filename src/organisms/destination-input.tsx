@@ -19,17 +19,23 @@ export const DestinationInput = ({
 }: Props) => {
   const [options, setOptions] = useState([] as Destination[])
   const [pending, setPending] = useState(false)
+  const [error, setError] = useState(null as string | null)
 
   useEffect(() => {
-    setPending(true)
-
     const fetchOptions = async () => {
-      const options = await fetchDestinationSuggestions(keyword)
+      try {
+        const options = await fetchDestinationSuggestions(keyword)
 
-      setOptions(options)
+        setOptions(options)
+      } catch (error) {
+        setError(error.message)
+      }
+
       setPending(false)
     }
 
+    setPending(true)
+    setError(null)
     fetchOptions()
   }, [keyword])
 
@@ -50,6 +56,7 @@ export const DestinationInput = ({
           </option>
         ))}
       </select>
+      {error && <p>{error}</p>}
     </>
   )
 }
