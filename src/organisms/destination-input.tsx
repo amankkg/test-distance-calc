@@ -21,6 +21,7 @@ export const DestinationInput = ({
   const [pending, setPending] = useState(false)
   const [error, setError] = useState(null as string | null)
 
+  // TODO: possible memory leak since setState can occur when component is unmounted
   useEffect(() => {
     const fetchOptions = async () => {
       try {
