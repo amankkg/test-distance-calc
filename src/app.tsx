@@ -1,10 +1,20 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import {BrowserRouter, Switch, Route, Link} from 'react-router-dom'
 import logo from './logo.svg'
 import './app.css'
 import {EstimatePage} from './features/estimate'
+import {useStoreDispatch} from './store'
+import {initThunk as busesInitThunk, BusesPage} from './features/buses'
+import {initThunk as driversInitThunk, DriversPage} from './features/drivers'
 
 function App() {
+  const dispatch = useStoreDispatch()
+
+  useEffect(() => {
+    dispatch(busesInitThunk())
+    dispatch(driversInitThunk())
+  }, [dispatch])
+
   const year = new Date().getFullYear()
 
   return (
@@ -21,10 +31,10 @@ function App() {
         <main className="app-body">
           <Switch>
             <Route path="/drivers">
-              <p>drivers</p>
+              <DriversPage />
             </Route>
             <Route path="/buses">
-              <p>buses</p>
+              <BusesPage />
             </Route>
             <Route path="/">
               <EstimatePage />
