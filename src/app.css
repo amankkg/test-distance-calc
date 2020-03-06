@@ -50,7 +50,7 @@
 
 .app-footer > * {
   margin: 5px 0;
-  color: white
+  color: white;
 }
 
 @keyframes app-logo-spin {
