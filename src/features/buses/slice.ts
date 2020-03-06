@@ -1,5 +1,5 @@
 import {createSlice, createAsyncThunk} from '@reduxjs/toolkit'
-import {fetchBuses} from '../../api'
+import {fetchBuses} from 'api'
 
 const initialState = {
   entities: [] as Bus[],

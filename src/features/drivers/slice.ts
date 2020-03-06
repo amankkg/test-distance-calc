@@ -1,5 +1,5 @@
 import {createSlice, createAsyncThunk} from '@reduxjs/toolkit'
-import {fetchDrivers} from '../../api'
+import {fetchDrivers} from 'api'
 
 const initialState = {
   entities: [] as Driver[],

@@ -1,5 +1,5 @@
 import {createSlice, PayloadAction, createAsyncThunk} from '@reduxjs/toolkit'
-import {calculateDistance} from '../../api'
+import {calculateDistance} from 'api'
 
 const initialState = {
   from: null as Destination | null,
