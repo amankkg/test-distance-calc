@@ -1,11 +1,11 @@
 import React, {useEffect} from 'react'
 import {BrowserRouter, Switch, Route, Link} from 'react-router-dom'
-import logo from './logo.svg'
 import './app.css'
 import {EstimatePage} from './features/estimate'
 import {useStoreDispatch} from './store'
 import {initThunk as busesInitThunk, BusesPage} from './features/buses'
 import {initThunk as driversInitThunk, DriversPage} from './features/drivers'
+import {logoUri} from './atoms'
 
 function App() {
   const dispatch = useStoreDispatch()
@@ -22,7 +22,7 @@ function App() {
       <div className="app">
         <header className="app-header">
           <Link to="/">
-            <img src={logo} className="app-logo" alt="logo" />
+            <img src={logoUri} className="app-logo" alt="logo" />
             Estimate trip
           </Link>
           <Link to="/drivers">Drivers</Link>

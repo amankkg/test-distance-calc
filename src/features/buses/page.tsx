@@ -1,5 +1,6 @@
 import React from 'react'
-import {useStoreSelector} from '../../store'
+import {useStoreSelector} from 'store'
+import {Spinner} from 'molecules'
 
 export const BusesPage = () => {
   const state = useStoreSelector(state => state.buses)
@@ -8,7 +9,7 @@ export const BusesPage = () => {
     <>
       <h1>Available buses</h1>
       {state.pending ? (
-        <p>loading...</p>
+        <Spinner />
       ) : (
         <ul>
           {state.entities.map(bus => (

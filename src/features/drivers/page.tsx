@@ -1,5 +1,6 @@
 import React, {useMemo} from 'react'
-import {useStoreSelector} from '../../store'
+import {useStoreSelector} from 'store'
+import {Spinner} from 'molecules'
 
 export const DriversPage = () => {
   const state = useStoreSelector(state => ({
@@ -22,7 +23,7 @@ export const DriversPage = () => {
     <>
       <h1>Available drivers</h1>
       {state.pending ? (
-        <p>loading...</p>
+        <Spinner />
       ) : (
         <ul>
           {driversWithBuses.map(driver => (

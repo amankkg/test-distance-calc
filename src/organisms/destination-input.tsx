@@ -1,14 +1,16 @@
 import React, {useState, useEffect} from 'react'
-import {fetchDestinationSuggestions} from '../api'
+import {fetchDestinationSuggestions} from 'api'
+import {Spinner} from 'molecules'
 
 type Props = Omit<
   React.ComponentProps<'input'>,
   'onChange' | 'onSelect' | 'value'
-> & {
-  keyword: string
-  onEdit: (value: string) => void
-  onSelect: (value: Destination) => void
-}
+> &
+  Readonly<{
+    keyword: string
+    onEdit: (value: string) => void
+    onSelect: (value: Destination) => void
+  }>
 
 export const DestinationInput = ({
   onSelect,
@@ -57,6 +59,7 @@ export const DestinationInput = ({
           </option>
         ))}
       </select>
+      {pending && <Spinner style={{height: '2vmax'}} />}
       {error && <p>{error}</p>}
     </>
   )

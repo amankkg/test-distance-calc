@@ -1,8 +1,9 @@
 import React from 'react'
-import {useStoreSelector, useStoreDispatch} from '../../store'
-import {DestinationInput} from '../../organisms'
+import {useStoreSelector, useStoreDispatch} from 'store'
+import {DestinationInput} from 'organisms'
 import {actions, thunks} from './slice'
 import {Estimates} from './estimates'
+import {Spinner} from 'molecules'
 
 export const EstimatePage = () => {
   const state = useStoreSelector(state => state.estimate)
@@ -35,18 +36,20 @@ export const EstimatePage = () => {
           onEdit={onChangeFrom}
           onSelect={onSelectFrom}
         />
+        <br />
         <DestinationInput
           name="to"
           keyword={state.toKeyword}
           onEdit={onChangeTo}
           onSelect={onSelectTo}
         />
+        <br />
         <button type="submit" disabled={state.pending}>
           submit
         </button>
       </form>
+      {state.pending ? <Spinner /> : <Estimates distance={state.distance} />}
       {state.error && <p>{state.error}</p>}
-      <Estimates distance={state.distance} />
     </div>
   )
 }
