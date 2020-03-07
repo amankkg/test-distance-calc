@@ -9,7 +9,7 @@ export const getEstimateOptions = (drivers: Driver[], buses: Bus[]) => {
 
   return (distance: number) => {
     const estimateOptions = options.map(([driverId, busId]) => {
-      const estimate = distance / busMap.get(busId)!.avgSpeed
+      const estimate = distance / 1000 / busMap.get(busId)!.avgSpeed
 
       return [driverMap.get(driverId)!, busMap.get(busId)!, estimate] as const
     })

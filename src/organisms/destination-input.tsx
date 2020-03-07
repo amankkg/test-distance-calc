@@ -1,74 +1,27 @@
-import React, {useRef, useEffect, useState} from 'react'
-import {initAutocompleteFor, getPredictions} from 'api'
+import React, {useRef, useEffect} from 'react'
+import {initAutocompleteFor} from 'api'
 import {Spinner} from 'molecules'
 import {useStoreSelector} from 'store'
 
-type Props = Omit<
-  React.ComponentProps<'input'>,
-  'onChange' | 'onSelect' | 'value'
-> &
+type Props = Omit<React.ComponentProps<'input'>, 'onSelect' | 'value' | 'ref'> &
   Readonly<{
-    keyword: string
-    origin?: LatLng
-    onEdit: (value: string) => void
     onSelect: (value: Destination, distance?: number) => void
   }>
 
-export const DestinationInput = ({
-  keyword,
-  origin,
-  onSelect,
-  onEdit,
-  ref,
-  ...props
-}: Props) => {
+export const DestinationInput = ({onSelect, ...props}: Props) => {
   const apiReady = useStoreSelector(state => state.app.placesApiReady)
-  const [loading, setLoading] = useState(false)
-  const [{predictions, error}, setPredictions] = useState<{
-    predictions: google.maps.places.AutocompletePrediction[],
-    error: string | null
-  }>({predictions: [], error: null})
+  const inputRef = useRef(null)
 
   useEffect(() => {
-    if (!apiReady) return
+    if (!apiReady || !inputRef.current) return
 
-    if (keyword === '') {
-      setPredictions({predictions: [], error: null})
-      return
-    }
-
-    setLoading(true)
-
-    const load = async () => {
-      try {
-        const predictions = await getPredictions(keyword, origin)
-
-        setPredictions({predictions, error: null})
-      } catch (error) {
-        setPredictions({predictions: [], error: error.message})
-      }
-
-    setLoading(false)
-    }
-
-    load()
-  }, [apiReady, keyword, origin])
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    onEdit(e.target.value)
-  }
+    return initAutocompleteFor(inputRef.current!, onSelect)
+  }, [apiReady, onSelect])
 
   return (
     <>
-      <input
-        {...props}
-        value={keyword}
-        onChange={handleChange}
-        type="text"
-      />
-      {predictions.map(p => <p key={p.place_id}>{p.place_id} | {p.description}</p>)}
-      {(!apiReady || loading) && <Spinner style={{height: '5vmax'}} />}
-      {error && <p>{error}</p>}
+      <input {...props} ref={inputRef} />
+      {!apiReady && <Spinner style={{height: '5vmax'}} />}
     </>
   )
 }

@@ -13,59 +13,54 @@ export const fetchGoogleMapsJsApi = (apiKey: string) => {
   })
 }
 
-type Options = {
+export const initAutocompleteFor = (
   element: HTMLInputElement,
-  origin?: LatLng,
-  onSelect: (destination: Destination, distance?: number) => void,
-}
-
-export const initAutocompleteFor = (options: Options) => {
-  const autocompleteOptions = {
+  onSelect: (destination: Destination) => void,
+) => {
+  const options = {
     types: ['(cities)'],
     fields: ['place_id', 'address_components', 'geometry'],
   }
 
-  // @ts-ignore
-  if (origin) autocompleteOptions.origin = origin
-
-  const autocomplete = new google.maps.places.Autocomplete(options.element, autocompleteOptions)
+  const autocomplete = new google.maps.places.Autocomplete(element, options)
 
   const onPlaceChanged = () => {
     const addressObject = autocomplete.getPlace()
     const address = addressObject.address_components
     const coords = addressObject.geometry?.location
 
-    if (address && coords)
-      options.onSelect({
-        id: addressObject.place_id || nanoid(),
-        name: address[0].long_name,
-        location: [coords.lat(), coords.lng()]
+    if (address && coords && addressObject.place_id) {
+      onSelect({
+        id: addressObject.place_id,
+        name: element.value,
+        location: [coords.lat(), coords.lng()],
       })
+    }
   }
 
-  autocomplete.addListener('place_changed', onPlaceChanged)
+  const listener = autocomplete.addListener('place_changed', onPlaceChanged)
 
-  return () => autocomplete.unbindAll()
+  return () => {
+    listener.remove()
+  }
 }
 
-let acService: google.maps.places.AutocompleteService
+let dmService: google.maps.DistanceMatrixService
 
-export const getPredictions = (input: string, origin?: LatLng) => {
-  if (!acService) acService = new google.maps.places.AutocompleteService()
+export const getDistance = (from: LatLng, to: LatLng) => {
+  if (!dmService) dmService = new google.maps.DistanceMatrixService()
 
-  const options = {input, types: ['(cities)']}
+  const requestOptions = {
+    origins: [new google.maps.LatLng(...from)],
+    destinations: [new google.maps.LatLng(...to)],
+    travelMode: google.maps.TravelMode.DRIVING,
+  }
 
-  // @ts-ignore
-  if (origin) options.origin = origin
-
-  return new Promise<google.maps.places.AutocompletePrediction[]>((resolve, reject) => {
-    acService.getPlacePredictions(
-      options,
-      (predictions, status) => {
-        if (status === google.maps.places.PlacesServiceStatus.OK) resolve(predictions)
-        else reject(new Error(status))
-      }
-    )
+  return new Promise<google.maps.DistanceMatrixResponse>((resolve, reject) => {
+    dmService.getDistanceMatrix(requestOptions, (response, status) => {
+      if (status === google.maps.DistanceMatrixStatus.OK) resolve(response)
+      else reject(new Error(status))
+    })
   })
 }
 

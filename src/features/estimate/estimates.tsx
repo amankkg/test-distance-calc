@@ -22,6 +22,7 @@ export const Estimates = () => {
 
   return (
     <>
+      {distance && <p>Distance is ~{(distance / 1000).toFixed(1)} km</p>}
       <h2>Available options</h2>
       <ul>
         {estimations.length > 0 ? (

@@ -13,7 +13,7 @@ export const initPlacesApiThunk = createAsyncThunk(
       await fetchGoogleMapsJsApi(apiKey)
     } catch (error) {
       // @ts-ignore
-      thunkApi.rejectWithError(error.message)
+      return thunkApi.rejectWithError(error.message)
     }
   },
 )
