@@ -48,6 +48,27 @@ export const initAutocompleteFor = (options: Options) => {
   return () => autocomplete.unbindAll()
 }
 
+let acService: google.maps.places.AutocompleteService
+
+export const getPredictions = (input: string, origin?: LatLng) => {
+  if (!acService) acService = new google.maps.places.AutocompleteService()
+
+  const options = {input, types: ['(cities)']}
+
+  // @ts-ignore
+  if (origin) options.origin = origin
+
+  return new Promise<google.maps.places.AutocompletePrediction[]>((resolve, reject) => {
+    acService.getPlacePredictions(
+      options,
+      (predictions, status) => {
+        if (status === google.maps.places.PlacesServiceStatus.OK) resolve(predictions)
+        else reject(new Error(status))
+      }
+    )
+  })
+}
+
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
 
 let i = 0

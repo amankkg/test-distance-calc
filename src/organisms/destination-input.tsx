@@ -1,5 +1,5 @@
-import React, {useRef, useEffect} from 'react'
-import {initAutocompleteFor} from 'api'
+import React, {useRef, useEffect, useState} from 'react'
+import {initAutocompleteFor, getPredictions} from 'api'
 import {Spinner} from 'molecules'
 import {useStoreSelector} from 'store'
 
@@ -23,20 +23,36 @@ export const DestinationInput = ({
   ...props
 }: Props) => {
   const apiReady = useStoreSelector(state => state.app.placesApiReady)
-  const inputRef = useRef(null)
+  const [loading, setLoading] = useState(false)
+  const [{predictions, error}, setPredictions] = useState<{
+    predictions: google.maps.places.AutocompletePrediction[],
+    error: string | null
+  }>({predictions: [], error: null})
 
   useEffect(() => {
-    if (!apiReady || !inputRef.current) return
+    if (!apiReady) return
 
-    initAutocompleteFor({
-      element: inputRef.current!,
-      origin,
-      onSelect: (destination: Destination, distance?: number) => {
-        onEdit(destination.name)
-        onSelect(destination, distance)
+    if (keyword === '') {
+      setPredictions({predictions: [], error: null})
+      return
+    }
+
+    setLoading(true)
+
+    const load = async () => {
+      try {
+        const predictions = await getPredictions(keyword, origin)
+
+        setPredictions({predictions, error: null})
+      } catch (error) {
+        setPredictions({predictions: [], error: error.message})
       }
-    })
-  }, [apiReady, onSelect, onEdit, origin])
+
+    setLoading(false)
+    }
+
+    load()
+  }, [apiReady, keyword, origin])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     onEdit(e.target.value)
@@ -46,12 +62,13 @@ export const DestinationInput = ({
     <>
       <input
         {...props}
-        ref={inputRef}
         value={keyword}
         onChange={handleChange}
         type="text"
       />
-      {!apiReady && <Spinner style={{height: '5vmax'}} />}
+      {predictions.map(p => <p key={p.place_id}>{p.place_id} | {p.description}</p>)}
+      {(!apiReady || loading) && <Spinner style={{height: '5vmax'}} />}
+      {error && <p>{error}</p>}
     </>
   )
 }
