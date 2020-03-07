@@ -19,8 +19,7 @@ const fetchDistance = createAsyncThunk(
 
       return response.rows[0].elements[0].distance.value
     } catch (error) {
-      // @ts-ignore
-      return thunkApi.rejectWithError(error.message)
+      return thunkApi.rejectWithValue(error.message)
     }
   },
 )
@@ -61,9 +60,11 @@ export const {actions, reducer} = createSlice({
       .addCase(fetchDistance.fulfilled, (state, action) => {
         state.distance = action.payload
         state.pending = false
+        state.error = null
       })
       .addCase(fetchDistance.rejected, (state, action) => {
         state.pending = false
-        state.error = action.error
+        // @ts-ignore
+        state.error = action.payload
       }),
 })

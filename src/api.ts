@@ -58,6 +58,7 @@ export const getDistance = (from: LatLng, to: LatLng) => {
 
   return new Promise<google.maps.DistanceMatrixResponse>((resolve, reject) => {
     dmService.getDistanceMatrix(requestOptions, (response, status) => {
+      if (++i % 3 === 0) reject(new Error('test error'))
       if (status === google.maps.DistanceMatrixStatus.OK) resolve(response)
       else reject(new Error(status))
     })

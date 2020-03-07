@@ -12,8 +12,7 @@ export const initPlacesApiThunk = createAsyncThunk(
     try {
       await fetchGoogleMapsJsApi(apiKey)
     } catch (error) {
-      // @ts-ignore
-      return thunkApi.rejectWithError(error.message)
+      return thunkApi.rejectWithValue(error.message)
     }
   },
 )
@@ -26,8 +25,10 @@ export const {actions, reducer} = createSlice({
     builder
       .addCase(initPlacesApiThunk.fulfilled, (state, action) => {
         state.placesApiReady = true
+        state.error = null
       })
       .addCase(initPlacesApiThunk.rejected, (state, action) => {
+        // @ts-ignore
         state.error = action.error
       }),
 })

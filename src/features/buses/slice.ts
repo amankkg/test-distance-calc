@@ -11,7 +11,6 @@ const fetchEntities = createAsyncThunk('buses/fetch', async (_, thunkApi) => {
   try {
     return await fetchBuses()
   } catch (error) {
-    // @ts-ignore
     return thunkApi.rejectWithValue(error.message)
   }
 })
@@ -30,9 +29,11 @@ export const {actions, reducer} = createSlice({
       .addCase(fetchEntities.fulfilled, (state, action) => {
         state.pending = false
         state.entities = action.payload
+        state.error = null
       })
       .addCase(fetchEntities.rejected, (state, action) => {
         state.pending = false
-        state.error = action.error
+        // @ts-ignore
+        state.error = action.payload
       }),
 })
