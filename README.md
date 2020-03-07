@@ -1,4 +1,4 @@
-Live preview https://test-distance-calc.amankkg.now.sh
+Live preview https://test-distance-calc.now.sh
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app), Redux Toolkit, React Router, TypeScript.
 
