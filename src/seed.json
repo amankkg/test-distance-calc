@@ -1,0 +1,31 @@
+{
+  "buses": [
+    {"make": "Make A bus", "avgSpeed": 75},
+    {"make": "Make B bus", "avgSpeed": 80},
+    {"make": "Make C bus", "avgSpeed": 80},
+    {"make": "Make D bus", "avgSpeed": 80},
+    {"make": "Make E bus", "avgSpeed": 85}
+  ],
+  "drivers": [
+    {
+      "firstName": "John",
+      "lastName": "Doe",
+      "availableBuses": [0, 2, 3]
+    },
+    {
+      "firstName": "Jane",
+      "lastName": "Doe",
+      "availableBuses": [1, 2, 4]
+    },
+    {
+      "firstName": "Toyah",
+      "lastName": "Franks",
+      "availableBuses": [2, 3, 4]
+    },
+    {
+      "firstName": "Stan",
+      "lastName": "Archer",
+      "availableBuses": [0, 1, 3]
+    }
+  ]
+}
