@@ -8,17 +8,16 @@ export const fetchDrivers = new Promise<Driver[]>(resolve => {
   setTimeout(resolve, 300, seedData.drivers)
 })
 
-export const fetchGoogleMapsJsApi = (apiKey: string) =>
-  new Promise((resolve, reject) => {
-    const script = document.createElement('script')
+export const fetchGoogleMapsJsApi = new Promise((resolve, reject) => {
+  const script = document.createElement('script')
 
-    script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places`
-    script.async = true
-    script.addEventListener('load', resolve)
-    script.addEventListener('error', reject)
+  script.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_GOOGLE_MAPS_JS_API_KEY}&libraries=places`
+  script.async = true
+  script.addEventListener('load', resolve)
+  script.addEventListener('error', reject)
 
-    document.body.appendChild(script)
-  })
+  document.body.appendChild(script)
+})
 
 export const initAutocompleteFor = (
   element: HTMLInputElement,

@@ -21,7 +21,7 @@ const App = () => {
     dispatch(driversInitThunk())
 
     if (!placesApiReady) {
-      dispatch(initPlacesApiThunk(process.env.REACT_APP_GOOGLE_MAPS_JS_API_KEY))
+      dispatch(initPlacesApiThunk())
     }
   }, [placesApiReady, dispatch])
 

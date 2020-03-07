@@ -15,9 +15,9 @@ const initialState = {
 
 const initPlacesApi = createAsyncThunk(
   'estimate/initPlacesApi',
-  async (apiKey: string, thunkApi) => {
+  async (_, thunkApi) => {
     try {
-      await fetchGoogleMapsJsApi(apiKey)
+      await fetchGoogleMapsJsApi
     } catch (error) {
       return thunkApi.rejectWithValue(error.message)
     }
