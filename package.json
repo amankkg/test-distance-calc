@@ -7,7 +7,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "fmt": "eslint src/**/*.{ts,tsx} --fix && prettier src/**/*.{css,ts,tsx,json} --write"
+    "fmt": "eslint src --ext=ts --ext=tsx --fix && prettier src/**/*.{css,ts,tsx,json} .eslintrc.js --write"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.3.0-beta.0",
@@ -22,18 +22,15 @@
     "@testing-library/user-event": "^7.1.2",
     "@types/googlemaps": "^3.39.3",
     "@types/jest": "^24.0.0",
-    "@types/nanoid": "^2.1.0",
     "@types/node": "^12.0.0",
     "@types/react": "^16.9.0",
     "@types/react-dom": "^16.9.0",
     "@types/react-redux": "^7.1.7",
     "@types/react-router-dom": "^5.1.3",
+    "eslint-plugin-simple-import-sort": "^5.0.1",
     "prettier": "^1.19.1",
     "react-scripts": "3.4.0",
     "typescript": "^3.8.3"
-  },
-  "eslintConfig": {
-    "extends": "react-app"
   },
   "browserslist": {
     "production": [

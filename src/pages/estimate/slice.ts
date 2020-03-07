@@ -1,5 +1,6 @@
-import {createSlice, PayloadAction, createAsyncThunk} from '@reduxjs/toolkit'
-import {getDistance, fetchGoogleMapsJsApi} from 'api'
+import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit'
+
+import {fetchGoogleMapsJsApi, getDistance} from 'api'
 
 const initialState = {
   placesApiReady: false,

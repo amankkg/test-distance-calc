@@ -1,12 +1,14 @@
 import React, {useEffect} from 'react'
-import {BrowserRouter, Switch, Route, Link} from 'react-router-dom'
+import {BrowserRouter, Link, Route, Switch} from 'react-router-dom'
+
+import {BusesPage, initThunk as busesInitThunk} from './pages/buses'
+import {DriversPage, initThunk as driversInitThunk} from './pages/drivers'
+import {EstimatePage} from './pages/estimate'
+import {initPlacesApiThunk} from './pages/estimate'
+import {logoUri} from './components'
+import {useStoreDispatch, useStoreSelector} from './store'
+
 import './app.css'
-import {EstimatePage} from 'pages/estimate'
-import {useStoreDispatch, useStoreSelector} from 'store'
-import {initThunk as busesInitThunk, BusesPage} from 'pages/buses'
-import {initThunk as driversInitThunk, DriversPage} from 'pages/drivers'
-import {logoUri} from 'components'
-import {initPlacesApiThunk} from 'pages/estimate'
 
 const App = () => {
   const placesApiReady = useStoreSelector(

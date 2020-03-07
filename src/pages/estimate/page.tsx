@@ -1,9 +1,11 @@
 import React, {useCallback} from 'react'
-import {useStoreSelector, useStoreDispatch} from 'store'
+
 import {DestinationInput} from 'components'
-import {actions, thunks} from './slice'
-import {Estimates} from './estimates'
 import {Spinner} from 'components'
+import {useStoreDispatch, useStoreSelector} from 'store'
+
+import {Estimates} from './estimates'
+import {actions, thunks} from './slice'
 
 export const EstimatePage = () => {
   const state = useStoreSelector(state => state.estimate)

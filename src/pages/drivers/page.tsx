@@ -1,6 +1,7 @@
 import React, {useMemo} from 'react'
-import {useStoreSelector} from 'store'
+
 import {Spinner} from 'components'
+import {useStoreSelector} from 'store'
 
 export const DriversPage = () => {
   const state = useStoreSelector(state => ({

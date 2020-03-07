@@ -1,6 +1,7 @@
 import React from 'react'
-import {useStoreSelector} from 'store'
+
 import {Spinner} from 'components'
+import {useStoreSelector} from 'store'
 
 export const BusesPage = () => {
   const state = useStoreSelector(state => state.buses)
