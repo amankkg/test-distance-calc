@@ -1,26 +1,27 @@
 import React, {useEffect} from 'react'
 import {BrowserRouter, Switch, Route, Link} from 'react-router-dom'
 import './app.css'
-import {EstimatePage} from 'features/estimate'
+import {EstimatePage} from 'pages/estimate'
 import {useStoreDispatch, useStoreSelector} from 'store'
-import {initThunk as busesInitThunk, BusesPage} from 'features/buses'
-import {initThunk as driversInitThunk, DriversPage} from 'features/drivers'
-import {logoUri} from 'atoms'
-import {initPlacesApiThunk} from './slice'
+import {initThunk as busesInitThunk, BusesPage} from 'pages/buses'
+import {initThunk as driversInitThunk, DriversPage} from 'pages/drivers'
+import {logoUri} from 'components'
+import {initPlacesApiThunk} from 'pages/estimate'
 
-export const App = () => {
-  const state = useStoreSelector(state => state.app)
+const App = () => {
+  const placesApiReady = useStoreSelector(
+    state => state.estimate.placesApiReady,
+  )
   const dispatch = useStoreDispatch()
 
   useEffect(() => {
     dispatch(busesInitThunk())
     dispatch(driversInitThunk())
 
-    if (!state.placesApiReady) {
+    if (!placesApiReady) {
       dispatch(initPlacesApiThunk(process.env.REACT_APP_GOOGLE_MAPS_JS_API_KEY))
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [placesApiReady, dispatch])
 
   const year = new Date().getFullYear()
 
@@ -36,7 +37,6 @@ export const App = () => {
           <Link to="/buses">Buses</Link>
         </header>
         <main className="app-body">
-          {state.error && <p>{state.error}</p>}
           <Switch>
             <Route path="/drivers">
               <DriversPage />
@@ -63,3 +63,5 @@ export const App = () => {
     </BrowserRouter>
   )
 }
+
+export default App

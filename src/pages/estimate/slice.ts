@@ -1,7 +1,8 @@
 import {createSlice, PayloadAction, createAsyncThunk} from '@reduxjs/toolkit'
-import {getDistance} from 'api'
+import {getDistance, fetchGoogleMapsJsApi} from 'api'
 
 const initialState = {
+  placesApiReady: false,
   from: null as Destination | null,
   to: null as Destination | null,
   fromKeyword: '',
@@ -10,6 +11,17 @@ const initialState = {
   pending: false,
   error: null as string | null,
 }
+
+const initPlacesApi = createAsyncThunk(
+  'estimate/initPlacesApi',
+  async (apiKey: string, thunkApi) => {
+    try {
+      await fetchGoogleMapsJsApi(apiKey)
+    } catch (error) {
+      return thunkApi.rejectWithValue(error.message)
+    }
+  },
+)
 
 const fetchDistance = createAsyncThunk(
   'estimate/fetchDistance',
@@ -24,7 +36,7 @@ const fetchDistance = createAsyncThunk(
   },
 )
 
-export const thunks = {fetchDistance}
+export const thunks = {initPlacesApi, fetchDistance}
 
 export const {actions, reducer} = createSlice({
   name: 'estimate',
@@ -53,6 +65,14 @@ export const {actions, reducer} = createSlice({
   },
   extraReducers: builder =>
     builder
+      .addCase(initPlacesApi.fulfilled, (state, action) => {
+        state.placesApiReady = true
+        state.error = null
+      })
+      .addCase(initPlacesApi.rejected, (state, action) => {
+        // @ts-ignore
+        state.error = action.error
+      })
       .addCase(fetchDistance.pending, (state, action) => {
         state.distance = null
         state.pending = true

@@ -1,15 +1,14 @@
 import React, {useRef, useEffect} from 'react'
 import {initAutocompleteFor} from 'api'
-import {Spinner} from 'molecules'
-import {useStoreSelector} from 'store'
+import {Spinner} from 'components'
 
 type Props = Omit<React.ComponentProps<'input'>, 'onSelect' | 'value' | 'ref'> &
   Readonly<{
+    apiReady?: boolean
     onSelect: (value: Destination, distance?: number) => void
   }>
 
-export const DestinationInput = ({onSelect, ...props}: Props) => {
-  const apiReady = useStoreSelector(state => state.app.placesApiReady)
+export const DestinationInput = ({onSelect, apiReady, ...props}: Props) => {
   const inputRef = useRef(null)
 
   useEffect(() => {

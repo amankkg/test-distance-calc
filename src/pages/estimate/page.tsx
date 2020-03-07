@@ -1,9 +1,9 @@
 import React, {useCallback} from 'react'
 import {useStoreSelector, useStoreDispatch} from 'store'
-import {DestinationInput} from 'organisms'
+import {DestinationInput} from 'components'
 import {actions, thunks} from './slice'
 import {Estimates} from './estimates'
-import {Spinner} from 'molecules'
+import {Spinner} from 'components'
 
 export const EstimatePage = () => {
   const state = useStoreSelector(state => state.estimate)
@@ -52,6 +52,7 @@ export const EstimatePage = () => {
       <form onSubmit={onSubmit}>
         <DestinationInput
           name="from"
+          apiReady={state.placesApiReady}
           defaultValue={state.fromKeyword}
           onChange={onChange}
           onSelect={onSelectFrom}
@@ -59,6 +60,7 @@ export const EstimatePage = () => {
         <br />
         <DestinationInput
           name="to"
+          apiReady={state.placesApiReady}
           defaultValue={state.toKeyword}
           onChange={onChange}
           onSelect={onSelectTo}

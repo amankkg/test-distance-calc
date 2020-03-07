@@ -1,24 +1,29 @@
 import {createSlice, createAsyncThunk} from '@reduxjs/toolkit'
-import {fetchBuses} from 'api'
+import {fetchDrivers} from 'api'
 
 const initialState = {
-  entities: [] as Bus[],
+  entities: [] as Driver[],
   pending: false,
   error: null as string | null,
 }
 
-const fetchEntities = createAsyncThunk('buses/fetch', async (_, thunkApi) => {
-  try {
-    return await fetchBuses()
-  } catch (error) {
-    return thunkApi.rejectWithValue(error.message)
-  }
-})
+const fetchEntities = createAsyncThunk(
+  'drivers/fetchEntities',
+  async (_, thunkApi) => {
+    try {
+      return await fetchDrivers
+    } catch (error) {
+      return thunkApi.rejectWithValue(error.message)
+    }
+  },
+)
 
-export const thunks = {fetchEntities}
+export const thunks = {
+  fetchEntities,
+}
 
 export const {actions, reducer} = createSlice({
-  name: 'buses',
+  name: 'drivers',
   initialState,
   reducers: {},
   extraReducers: builder =>
@@ -31,9 +36,9 @@ export const {actions, reducer} = createSlice({
         state.entities = action.payload
         state.error = null
       })
-      .addCase(fetchEntities.rejected, (state, action) => {
+      .addCase(fetchEntities.rejected, (state, aciton) => {
         state.pending = false
         // @ts-ignore
-        state.error = action.payload
+        state.error = aciton.payload
       }),
 })

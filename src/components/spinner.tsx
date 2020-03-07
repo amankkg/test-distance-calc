@@ -1,7 +1,7 @@
 import React from 'react'
 
 import './spinner.css'
-import {logoUri} from 'atoms'
+import {logoUri} from 'components'
 
 type Props = Omit<React.ComponentProps<'img'>, 'src'>
 
