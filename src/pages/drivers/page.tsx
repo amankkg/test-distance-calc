@@ -28,22 +28,22 @@ export const DriversPage = () => {
       ) : (
         <ul>
           {driversWithBuses.map(driver => (
-            <li key={driver.id}>
+            <li key={driver.id} className="list-item">
               <p>
                 <strong>
-                  {driver.firstName} {driver.lastName}
+                  👤 {driver.firstName} {driver.lastName}
                 </strong>
               </p>
               {driver.buses.map(bus => (
                 <p key={bus.id}>
-                  {bus.make}, avg. speed: {bus.avgSpeed} km/h
+                  🚍 {bus.make}, avg. speed: {bus.avgSpeed} km/h
                 </p>
               ))}
             </li>
           ))}
         </ul>
       )}
-      {state.error && <p>{state.error}</p>}
+      {state.error && <p className="error">{state.error}</p>}
     </>
   )
 }

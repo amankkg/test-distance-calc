@@ -1,0 +1,54 @@
+.estimate-page__form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.estimate-page__form > button {
+  background-color: #008cba;
+  border: none;
+  color: white;
+  padding: 14px 26px;
+  margin: 2px 5px;
+  text-align: center;
+  text-decoration: none;
+  font-size: calc(8px + 1vmax);
+  cursor: pointer;
+}
+
+.estimate-page__form > button:hover {
+  transform: scale(1.08);
+}
+
+.estimate-page__form > button:active {
+  transform: scale(1.05);
+}
+
+.estimate-page__form > button:disabled {
+  background-color: gray;
+}
+
+.estimate-page__form-field {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: calc(8px + 1vmax);
+}
+
+.estimate-page__form-field > input {
+  font-size: calc(8px + 1vmax);
+  font-weight: 600;
+  margin-left: 10px;
+  border-radius: none;
+  border-radius: 0.3rem;
+  padding: 5px;
+}
+
+.pac-item {
+  font-size: calc(5px + 1vmax);
+}
+
+.pac-item-query {
+  font-size: calc(7px + 1vmax);
+}

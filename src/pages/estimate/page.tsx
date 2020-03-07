@@ -7,6 +7,8 @@ import {useStoreDispatch, useStoreSelector} from 'store'
 import {Estimates} from './estimates'
 import {actions, thunks} from './slice'
 
+import './page.css'
+
 export const EstimatePage = () => {
   const state = useStoreSelector(state => state.estimate)
   const dispatch = useStoreDispatch()
@@ -14,7 +16,7 @@ export const EstimatePage = () => {
   const onChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const action =
-        e.target.name === 'from' ? actions.setKeywordFrom : actions.setKeywordTo
+        e.target.id === 'from' ? actions.setKeywordFrom : actions.setKeywordTo
 
       dispatch(action(e.target.value))
     },
@@ -39,41 +41,51 @@ export const EstimatePage = () => {
     (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault()
 
-      if (state.from == null || state.to == null) return
+      const notReady =
+        state.from == null || state.to == null || state.to.id === state.from.id
 
-      const options = {from: state.from.location, to: state.to.location}
+      if (notReady) return
+
+      const options = {from: state.from!.location, to: state.to!.location}
 
       dispatch(thunks.fetchDistance(options))
     },
-    [state, dispatch],
+    [state.from, state.to, dispatch],
   )
+
+  const estimationDisallowed =
+    state.pending || !state.from || !state.to || state.from.id === state.to.id
 
   return (
     <div>
       <h1>Estimate your trip</h1>
-      <form onSubmit={onSubmit}>
-        <DestinationInput
-          name="from"
-          apiReady={state.placesApiReady}
-          defaultValue={state.fromKeyword}
-          onChange={onChange}
-          onSelect={onSelectFrom}
-        />
-        <br />
-        <DestinationInput
-          name="to"
-          apiReady={state.placesApiReady}
-          defaultValue={state.toKeyword}
-          onChange={onChange}
-          onSelect={onSelectTo}
-        />
-        <br />
-        <button type="submit" disabled={state.pending}>
-          submit
+      <form onSubmit={onSubmit} className="estimate-page__form">
+        <p className="estimate-page__form-field">
+          <label htmlFor="from">From</label>
+          <DestinationInput
+            id="from"
+            apiReady={state.placesApiReady}
+            defaultValue={state.fromKeyword}
+            onChange={onChange}
+            onSelect={onSelectFrom}
+          />
+        </p>
+        <p className="estimate-page__form-field">
+          <label htmlFor="to">To</label>
+          <DestinationInput
+            id="to"
+            apiReady={state.placesApiReady}
+            defaultValue={state.toKeyword}
+            onChange={onChange}
+            onSelect={onSelectTo}
+          />
+        </p>
+        <button type="submit" disabled={estimationDisallowed}>
+          Estimate
         </button>
       </form>
       {state.pending ? <Spinner /> : <Estimates />}
-      {state.error && <p>{state.error}</p>}
+      {state.error && <p className="error">{state.error}</p>}
     </div>
   )
 }

@@ -14,16 +14,16 @@ export const BusesPage = () => {
       ) : (
         <ul>
           {state.entities.map(bus => (
-            <li key={bus.id}>
+            <li key={bus.id} className="list-item">
               <p>
-                <strong>{bus.make}</strong>
+                <strong>🚍 {bus.make}</strong>
               </p>
               avg. speed is {bus.avgSpeed} km/h
             </li>
           ))}
         </ul>
       )}
-      {state.error && <p>{state.error}</p>}
+      {state.error && <p className="error">{state.error}</p>}
     </>
   )
 }

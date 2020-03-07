@@ -30,7 +30,11 @@ const fetchDistance = createAsyncThunk(
     try {
       const response = await getDistance(from, to)
 
-      return response.rows[0].elements[0].distance.value
+      const distance = response.rows[0].elements[0].distance?.value ?? null
+
+      if (distance === null) throw new Error('route not found')
+
+      return distance
     } catch (error) {
       return thunkApi.rejectWithValue(error.message)
     }
