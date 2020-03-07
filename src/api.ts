@@ -1,23 +1,56 @@
 import nanoid from 'nanoid'
 
+export const fetchGoogleMapsJsApi = (apiKey: string) => {
+  const script = document.createElement('script')
+  script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places`
+  script.async = true
+
+  return new Promise((resolve, reject) => {
+    script.addEventListener('load', resolve)
+    script.addEventListener('error', reject)
+
+    document.body.appendChild(script)
+  })
+}
+
+type Options = {
+  element: HTMLInputElement,
+  origin?: LatLng,
+  onSelect: (destination: Destination, distance?: number) => void,
+}
+
+export const initAutocompleteFor = (options: Options) => {
+  const autocompleteOptions = {
+    types: ['(cities)'],
+    fields: ['place_id', 'address_components', 'geometry'],
+  }
+
+  // @ts-ignore
+  if (origin) autocompleteOptions.origin = origin
+
+  const autocomplete = new google.maps.places.Autocomplete(options.element, autocompleteOptions)
+
+  const onPlaceChanged = () => {
+    const addressObject = autocomplete.getPlace()
+    const address = addressObject.address_components
+    const coords = addressObject.geometry?.location
+
+    if (address && coords)
+      options.onSelect({
+        id: addressObject.place_id || nanoid(),
+        name: address[0].long_name,
+        location: [coords.lat(), coords.lng()]
+      })
+  }
+
+  autocomplete.addListener('place_changed', onPlaceChanged)
+
+  return () => autocomplete.unbindAll()
+}
+
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
 
 let i = 0
-
-export const fetchDestinationSuggestions = async (keyword: string) => {
-  await sleep(1500)
-
-  if (++i % 5 === 0) throw new Error('some error')
-
-  return cities
-}
-
-export const calculateDistance = async (from: Destination, to: Destination) => {
-  await sleep(2000)
-  if (++i % 5 === 0) throw new Error('some error')
-
-  return i % 2 === 0 ? 1500 : 1200
-}
 
 export const fetchBuses = async () => {
   await sleep(500)

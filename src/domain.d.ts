@@ -14,6 +14,7 @@ type Bus = {
 type Destination = {
   id: string
   name: string
-  longitude: number
-  latitude: number
+  location: LatLng
 }
+
+type LatLng = [number, number]

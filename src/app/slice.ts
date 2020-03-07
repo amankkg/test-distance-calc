@@ -1,5 +1,5 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit'
-import {injectGoogleMapsJsApi} from 'api'
+import {fetchGoogleMapsJsApi} from 'api'
 
 const initialState = {
   placesApiReady: false,
@@ -10,7 +10,7 @@ export const initPlacesApiThunk = createAsyncThunk(
   'app/initPlacesApi',
   async (apiKey: string, thunkApi) => {
     try {
-      return await injectGoogleMapsJsApi(apiKey)
+      await fetchGoogleMapsJsApi(apiKey)
     } catch (error) {
       // @ts-ignore
       thunkApi.rejectWithError(error.message)

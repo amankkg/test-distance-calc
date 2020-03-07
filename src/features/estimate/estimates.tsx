@@ -1,22 +1,20 @@
 import React, {useMemo} from 'react'
 
-import {getEstimateOptions} from './core'
 import {useStoreSelector} from 'store'
+import {getEstimateOptions} from './core'
 
-type Props = Readonly<{
-  distance: null | number
-}>
-
-export const Estimates = ({distance}: Props) => {
-  const {drivers, buses} = useStoreSelector(state => ({
+export const Estimates = () => {
+  const {drivers, buses, distance} = useStoreSelector(state => ({
     drivers: state.drivers.entities,
     buses: state.buses.entities,
+    distance: state.estimate.distance,
   }))
 
   const estimate = useMemo(() => getEstimateOptions(drivers, buses), [
     drivers,
     buses,
   ])
+
   const estimations = useMemo(
     () => (distance != null ? estimate(distance) : []),
     [estimate, distance],

@@ -1,5 +1,4 @@
-import {createSlice, PayloadAction, createAsyncThunk} from '@reduxjs/toolkit'
-import {calculateDistance} from 'api'
+import {createSlice, PayloadAction} from '@reduxjs/toolkit'
 
 const initialState = {
   from: null as Destination | null,
@@ -7,17 +6,7 @@ const initialState = {
   fromKeyword: '',
   toKeyword: '',
   distance: null as number | null,
-  pending: false,
-  error: null as string | null,
 }
-
-const fetchDistance = createAsyncThunk(
-  'estimate/fetchDistance',
-  async ({from, to}: {from: Destination; to: Destination}, thunkApi) =>
-    await calculateDistance(from, to),
-)
-
-export const thunks = {fetchDistance}
 
 export const {actions, reducer} = createSlice({
   name: 'estimate',
@@ -29,27 +18,15 @@ export const {actions, reducer} = createSlice({
     setKeywordTo(state, action: PayloadAction<string>) {
       state.toKeyword = action.payload
     },
-    setDestinationFrom(state, action: PayloadAction<Destination>) {
+    setDestinationFrom(state, action: PayloadAction<Destination & {distance?: number}>) {
       state.from = action.payload
       state.fromKeyword = action.payload.name
+      state.distance = action.payload.distance ?? null
     },
-    setDestinationTo(state, action: PayloadAction<Destination>) {
+    setDestinationTo(state, action: PayloadAction<Destination & {distance?: number}>) {
       state.to = action.payload
       state.toKeyword = action.payload.name
+      state.distance = action.payload.distance ?? null
     },
   },
-  extraReducers: builder =>
-    builder
-      .addCase(fetchDistance.pending, (state, action) => {
-        state.distance = null
-        state.pending = true
-      })
-      .addCase(fetchDistance.fulfilled, (state, action) => {
-        state.distance = action.payload
-        state.pending = false
-      })
-      .addCase(fetchDistance.rejected, (state, action) => {
-        state.pending = false
-        state.error = action.error
-      }),
 })
